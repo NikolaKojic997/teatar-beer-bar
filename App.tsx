@@ -69,8 +69,8 @@ const App: React.FC = () => {
     const items = menuItems.filter(item => item.Grupa === selectedCategory);
     const normalizedCategory = selectedCategory.trim().toUpperCase();
 
-    // Posebno sortiranje za toplu sekciju (npr. 'KAFE I ČAJEVI' ili 'TOPLI NAPICI')
-    if (normalizedCategory === 'KAFE I ČAJEVI' || normalizedCategory === 'TOPLI NAPICI') {
+    // Posebno sortiranje za toplu sekciju
+    if (normalizedCategory === 'TOPLI NAPICI') {
       return [...items].sort((a, b) => {
         const nameA = a.Naziv.toLowerCase();
         const nameB = b.Naziv.toLowerCase();
