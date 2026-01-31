@@ -86,41 +86,34 @@ const App: React.FC = () => {
           name.includes('domaca') ||
           name.includes('domaća');
 
-        const isTea = (name: string) =>
-          name.includes('čaj') ||
-          name.includes('caj') ||
-          name.includes('tea') ||
-          name.includes('vitaminski');
+        const isHotChocolate = (name: string) =>
+          name.includes('čokolada') ||
+          name.includes('cokolada') ||
+          name.includes('chocolate');
 
         const aIsCoffee = isCoffee(nameA);
         const bIsCoffee = isCoffee(nameB);
-        const aIsTea = isTea(nameA);
-        const bIsTea = isTea(nameB);
+        const aIsHotCH = isHotChocolate(nameA);
+        const bIsHotCH = isHotChocolate(nameB);
 
-        // Prioritet: Kafe (1), Čajevi (2), Ostalo (3)
-        let prioA = 3;
+        // Prioritet: 
+        // 1. Kafe
+        // 2. Sve ostalo (Čajevi, vitaminski, itd.)
+        // 3. Tople čokolade
+        let prioA = 2; // Default su čajevi i ostalo
         if (aIsCoffee) prioA = 1;
-        else if (aIsTea) prioA = 2;
+        else if (aIsHotCH) prioA = 3;
 
-        let prioB = 3;
+        let prioB = 2;
         if (bIsCoffee) prioB = 1;
-        else if (bIsTea) prioB = 2;
+        else if (bIsHotCH) prioB = 3;
 
         if (prioA !== prioB) {
           return prioA - prioB;
         }
 
-        // Unutar iste kategorije
-        if (prioA === 1) {
-          // Kafe sortirane po ceni
-          return a.Cena - b.Cena;
-        } else if (prioA === 2) {
-          // Čajevi sortirani po ceni
-          return a.Cena - b.Cena;
-        } else {
-          // Ostalo po nazivu
-          return nameA.localeCompare(nameB);
-        }
+        // Unutar iste grupe, sve sortiramo po ceni (i kafe i čajeve)
+        return a.Cena - b.Cena;
       });
     }
 
