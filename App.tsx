@@ -117,8 +117,13 @@ const App: React.FC = () => {
       });
     }
 
-    // Sortiranje po ceni za industrijska flaširana piva, žestine i vina
-    if (normalizedCategory === 'INDUSTRIJSKA FLASIRANA PIVA' || normalizedCategory === 'ZESTINE' || normalizedCategory === 'VINA') {
+    // Sortiranje po ceni za piva, žestine, vina i sokove
+    if (
+      normalizedCategory === 'INDUSTRIJSKA FLASIRANA PIVA' ||
+      normalizedCategory === 'ZESTINE' ||
+      normalizedCategory === 'VINA' ||
+      normalizedCategory === 'GAZIRANI I NEGAZIRANI SOKOVI'
+    ) {
       return [...items].sort((a, b) => a.Cena - b.Cena);
     }
 
