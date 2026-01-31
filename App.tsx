@@ -65,7 +65,65 @@ const App: React.FC = () => {
 
   const filteredItems = useMemo(() => {
     if (!selectedCategory) return [];
-    return menuItems.filter(item => item.Grupa === selectedCategory);
+
+    const items = menuItems.filter(item => item.Grupa === selectedCategory);
+    const normalizedCategory = selectedCategory.trim().toUpperCase();
+
+    // Posebno sortiranje za toplu sekciju (npr. 'KAFE I ČAJEVI' ili 'TOPLI NAPICI')
+    if (normalizedCategory === 'KAFE I ČAJEVI' || normalizedCategory === 'TOPLI NAPICI') {
+      return [...items].sort((a, b) => {
+        const nameA = a.Naziv.toLowerCase();
+        const nameB = b.Naziv.toLowerCase();
+
+        const isCoffee = (name: string) =>
+          name.includes('kafa') ||
+          name.includes('espresso') ||
+          name.includes('macchiato') ||
+          name.includes('cappuccino') ||
+          name.includes('nes') ||
+          name.includes('latte') ||
+          name.includes('moka') ||
+          name.includes('domaca') ||
+          name.includes('domaća');
+
+        const isTea = (name: string) =>
+          name.includes('čaj') ||
+          name.includes('caj') ||
+          name.includes('tea');
+
+        const aIsCoffee = isCoffee(nameA);
+        const bIsCoffee = isCoffee(nameB);
+        const aIsTea = isTea(nameA);
+        const bIsTea = isTea(nameB);
+
+        // Prioritet: Kafe (1), Čajevi (2), Ostalo (3)
+        let prioA = 3;
+        if (aIsCoffee) prioA = 1;
+        else if (aIsTea) prioA = 2;
+
+        let prioB = 3;
+        if (bIsCoffee) prioB = 1;
+        else if (bIsTea) prioB = 2;
+
+        if (prioA !== prioB) {
+          return prioA - prioB;
+        }
+
+        // Unutar iste kategorije
+        if (prioA === 1) {
+          // Kafe sortirane po ceni
+          return a.Cena - b.Cena;
+        } else if (prioA === 2) {
+          // Čajevi sortirani redom (po nazivu)
+          return nameA.localeCompare(nameB);
+        } else {
+          // Ostalo po nazivu
+          return nameA.localeCompare(nameB);
+        }
+      });
+    }
+
+    return items;
   }, [selectedCategory, menuItems]);
 
   const handleCategorySelect = (categoryName: string) => {
