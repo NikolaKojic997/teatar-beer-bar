@@ -89,7 +89,8 @@ const App: React.FC = () => {
         const isTea = (name: string) =>
           name.includes('čaj') ||
           name.includes('caj') ||
-          name.includes('tea');
+          name.includes('tea') ||
+          name.includes('vitaminski');
 
         const aIsCoffee = isCoffee(nameA);
         const bIsCoffee = isCoffee(nameB);
