@@ -115,8 +115,8 @@ const App: React.FC = () => {
           // Kafe sortirane po ceni
           return a.Cena - b.Cena;
         } else if (prioA === 2) {
-          // Čajevi sortirani redom (po nazivu)
-          return nameA.localeCompare(nameB);
+          // Čajevi sortirani po ceni
+          return a.Cena - b.Cena;
         } else {
           // Ostalo po nazivu
           return nameA.localeCompare(nameB);
