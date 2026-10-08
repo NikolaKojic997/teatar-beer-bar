@@ -130,10 +130,35 @@ def build_pdf():
         if g not in ordered_groups:
             ordered_groups.append(g)
             
+    def sort_group_df(group_name, group_df):
+        normalized = str(group_name).strip().upper()
+        if normalized == 'TOPLI NAPICI':
+            def get_sort_key(row):
+                name = str(row['Naziv']).lower()
+                cena = float(row['Cena']) if pd.notna(row['Cena']) else 0.0
+                is_coffee = any(w in name for w in ['kafa', 'espresso', 'macchiato', 'cappuccino', 'nes', 'latte', 'moka', 'domaca', 'domaća'])
+                is_hot_ch = any(w in name for w in ['čokolada', 'cokolada', 'chocolate'])
+                if is_coffee:
+                    prio = 1
+                elif is_hot_ch:
+                    prio = 3
+                else:
+                    prio = 2
+                return (prio, cena, name)
+            rows = group_df.to_dict('records')
+            rows.sort(key=get_sort_key)
+            return pd.DataFrame(rows)
+        else:
+            rows = group_df.to_dict('records')
+            rows.sort(key=lambda r: (float(r['Cena']) if pd.notna(r['Cena']) else 0.0, str(r['Naziv']).lower()))
+            return pd.DataFrame(rows)
+
     for group in ordered_groups:
         group_df = df[df['Grupa'] == group]
         if group_df.empty:
             continue
+            
+        group_df = sort_group_df(group, group_df)
             
         group_elements = []
         group_elements.append(Paragraph(f"• {group.upper()} •", category_style))
