@@ -33,6 +33,9 @@ try:
         mask = df['Grupa'].str.upper() == 'VINA FLASICE'
         df.loc[mask, 'Grupa'] = 'VINA'
         
+        mask_typo = df['Grupa'].str.upper() == 'IDUSTRIJSKA FLASIRANA PIVA'
+        df.loc[mask_typo, 'Grupa'] = 'INDUSTRIJSKA FLASIRANA PIVA'
+        
         # Get unique groups for dropdown
         unique_groups = sorted([g for g in df['Grupa'].unique() if pd.notna(g) and g != 'nan'])
         print("Unique Groups for dropdown:", unique_groups)
